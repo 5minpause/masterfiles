@@ -1,31 +1,37 @@
 # RVM bootstrap
 $:.unshift(File.expand_path("~/.rvm/lib"))
 require 'rvm/capistrano'
-set :rvm_ruby_string, 'ree-1.8.7-2011.02@<*project_name*>'
+set :rvm_ruby_string, 'ree-1.8.7-2011.02@project_name'
 set :rvm_type, :user
 
 require 'bundler/capistrano'
 
-set :application, "<*project_name*>"
+set :application, "project_name"
 
+#set :scm, :subversion
 set :scm, :git
 set :user, 'ikusei'
 
 #git
-set :repository,  "ssh://git@178.23.121.2/home/git/<*project_name*>"
+set :repository,  "ssh://git@178.23.121.2/home/git/project_name"
 set :branch, "master"
 set :deploy_via, :remote_cache
 
-set :deploy_to, "/home/ikusei/<*project_name*>"
-set :db_name, "db_#{<*project_name*>}"
-set :db_username, "user_#{<*project_name*>}"
+#subervsion
+#set :repository,  "svn+ssh://bti@80.239.150.82/home/bti/svn/berlin"
+set :deploy_to, "/home/ikusei/project_name"
+set :db_name, "db_#{application}"
+set :db_username, "user_#{application}"
 
 set :ip_address, '178.23.121.30'
 set :use_sudo, false
+# Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 
-role :web, "178.23.121.27"                          # Your HTTP server, Apache/etc
-role :app, "178.23.121.27"                          # This may be the same as your `Web` server
-role :db,  "178.23.121.27", :primary => true        # This is where Rails migrations will run  
+role :web, "178.23.121.30"                          # Your HTTP server, Apache/etc
+role :app, "178.23.121.30"                          # This may be the same as your `Web` server
+role :db,  "178.23.121.30", :primary => true        # This is where Rails migrations will run  
+
+
 
 namespace :deploy do
   
@@ -77,11 +83,11 @@ namespace :deploy do
 
     task :setup, :role => :db do
       set(:db_root_password) { Capistrano::CLI.password_prompt("Enter MySQL ROOT password [noecho]: ") }
-      set(:db_password) { Capistrano::CLI.password_prompt("Enter MySQL password for #{<*project_name*>} [noecho]: ") }
+      set(:db_password) { Capistrano::CLI.password_prompt("Enter MySQL password for #{application} [noecho]: ") }
       run "mkdir -p #{deploy_to}/shared/config/"
 
       create = ERB.new(File.read("config/templates/create_database.mysql.erb")).result(binding)
-      create_location = "#{deploy_to}/shared/config/create_db_#{<*project_name*>}.sql"
+      create_location = "#{deploy_to}/shared/config/create_db_#{application}.sql"
       put create, create_location
 
       run <<-EOSQL
