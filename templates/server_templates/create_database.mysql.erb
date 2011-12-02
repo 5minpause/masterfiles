@@ -1,0 +1,8 @@
+USE mysql;
+CREATE DATABASE IF NOT EXISTS db_project_name ;
+DELETE FROM user WHERE User = 'db_project_name';
+INSERT INTO user (Host, User, Password, Select_priv) VALUES 
+   ('localhost', 'db_project_name', password('db_password'), 'Y');
+FLUSH PRIVILEGES;
+GRANT ALL PRIVILEGES ON db_project_name.* TO db_project_name@localhost;
+FLUSH PRIVILEGES;

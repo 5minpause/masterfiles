@@ -1,0 +1,19 @@
+base: &base
+  adapter: mysql2
+  timeout: 5000
+  encoding: utf8
+  username: wrongenv
+  password: 1234
+  database: noexistant-wrong-env
+
+development:
+  <<: *base
+test:
+  <<: *base
+cucumber:
+  <<: *base
+production:
+  <<: *base
+  database: db_project_name
+  username: db_project_name
+  password: db_password
