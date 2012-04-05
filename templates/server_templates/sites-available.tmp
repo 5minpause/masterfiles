@@ -1,0 +1,9 @@
+<VirtualHost *:80>
+ ServerName my_url
+ DocumentRoot /home/ikusei/project_name/current/public
+ RackBaseURI /
+ <Directory /home/ikusei/project_name/public>
+ AllowOverride all
+ Options -MultiViews
+ </Directory>
+</VirtualHost>
