@@ -1,7 +1,7 @@
 # RVM bootstrap
 $:.unshift(File.expand_path("~/.rvm/lib"))
 require 'rvm/capistrano'
-set :rvm_ruby_string, 'ruby_string@project_name'
+set :rvm_ruby_string, 'ruby_string_ersatz@project_name'
 set :rvm_type, :user
 
 require 'bundler/capistrano'
@@ -73,6 +73,13 @@ namespace :deploy do
   task :setup_db do
     run "ln -sf #{deploy_to}/shared/config/database.yml #{current_release}/config/database.yml"
     run "ln -sf #{deploy_to}/shared/log #{current_release}/log"
+  end
+
+  desc "deploy apache 2 config file"
+  task :apache_setup do
+    sudo "mv /home/ikusei/#{application}/#{application} /etc/apache2/sites-available/"
+    sudo "a2ensite #{application}"
+    sudo "/etc/init.d/apache2 reload"
   end
     
   namespace :db do
