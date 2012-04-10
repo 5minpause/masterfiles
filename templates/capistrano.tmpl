@@ -86,9 +86,9 @@ namespace :deploy do
 
     task :setup, :role => :db do
       #set(:db_root_password) { Capistrano::CLI.password_prompt("Enter MySQL ROOT password [noecho]: ") }
-      set :db_root_password, "db_root_password"
+      set :db_root_password, "db_root_password_ersatz"
       #set(:db_password) { Capistrano::CLI.password_prompt("Enter MySQL password for #{application} [noecho]: ") }
-      set :db_password, "db_password"
+      set :db_password, "db_password_ersatz"
       run "mkdir -p #{deploy_to}/shared/config/"
 
       create = ERB.new(File.read("config/templates/create_database.mysql.erb")).result(binding)
