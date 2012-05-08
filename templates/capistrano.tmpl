@@ -41,9 +41,9 @@ namespace :deploy do
 
   desc "Clear all caches"
   task :clear_caches, :roles => :app do
-    #run "cd #{deploy_to} && RAILS_ENV=production rake tmp:cache:clear"
-    run "rm -rf #{current_release}/public/javascripts/cache"
-    run "rm -rf #{current_release}/public/stylesheets/cache"
+    run "cd #{deploy_to} && RAILS_ENV=production rake tmp:cache:clear"
+    #run "rm -rf #{current_release}/public/javascripts/cache"
+    #run "rm -rf #{current_release}/public/stylesheets/cache"
   end
   
   desc "Migrate the Database"
@@ -85,10 +85,8 @@ namespace :deploy do
   namespace :db do
 
     task :setup, :role => :db do
-      #set(:db_root_password) { Capistrano::CLI.password_prompt("Enter MySQL ROOT password [noecho]: ") }
-      set :db_root_password, "db_root_password_ersatz"
-      #set(:db_password) { Capistrano::CLI.password_prompt("Enter MySQL password for #{application} [noecho]: ") }
-      set :db_password, "db_password_ersatz"
+      set(:db_root_password) { Capistrano::CLI.password_prompt("Enter MySQL ROOT password [noecho]: ") }
+      set(:db_password) { Capistrano::CLI.password_prompt("Enter MySQL password for #{application} [noecho]: ") }
       run "mkdir -p #{deploy_to}/shared/config/"
 
       create = ERB.new(File.read("config/templates/create_database.mysql.erb")).result(binding)
@@ -109,4 +107,4 @@ namespace :deploy do
   
 end
 
-after 'deploy:symlink', 'deploy:setup_db'
+after 'deploy:create_symlink', 'deploy:setup_db'
