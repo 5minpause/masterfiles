@@ -13,7 +13,9 @@ test:
 cucumber:
   <<: *base
 production:
-  <<: *base
-  database: db_project_name
-  username: db_project_name
-  password: db_password
+  adapter: mysql2
+  timeout: 5000
+  encoding: utf8
+  database: <%= db_name %>
+  username: <%= db_username %>
+  password: <%= db_password %>
